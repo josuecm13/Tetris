@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="199dp"
+        tools:layout_editor_absoluteY="16dp">
+
+        <android.support.v7.widget.GridLayout
+            android:id="@+id/TetrisGridLayout"
+            android:layout_width="380dp"
+            android:layout_height="380dp"
+            android:layout_alignParentTop="true"
+            android:elevation="24dp"
+            app:columnCount="10"
+            app:rowCount="10"
+            tools:background="#252121">
+
+
+            <ImageView
+                android:id="@+id/tt00"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/ic_launcher"
+                app:layout_row="0"
+                app:layout_column="0"/>
+
+            <ImageView
+                android:id="@+id/tt01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/ic_launcher"
+                app:layout_row="0"
+                app:layout_column="1"/>
+            <ImageView
+                android:id="@+id/tt02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/ic_launcher"
+                app:layout_row="0"
+                app:layout_column="2"/>
+
+            <ImageView
+                android:id="@+id/tt03"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/ic_launcher"
+                app:layout_row="0"
+                app:layout_column="3"/>
+            <ImageView
+                android:id="@+id/tt04"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/ic_launcher"
+                app:layout_row="0"
+                app:layout_column="4"/>
+            <ImageView
+                android:id="@+id/tt05"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/ic_launcher"
+                app:layout_row="0"
+                app:layout_column="5"/>
+            <ImageView
+                android:id="@+id/tt06"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/ic_launcher"
+                app:layout_row="0"
+                app:layout_column="6"/>
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/ic_launcher"
+                app:layout_row="0"
+                app:layout_column="7"/>
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/ic_launcher"
+                app:layout_row="0"
+                app:layout_column="8"/>
+
+        </android.support.v7.widget.GridLayout>
+
+        <Button
+            android:id="@+id/leftBtn"
+            android:layout_width="74dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="18dp"
+            android:layout_marginStart="16dp"
+            android:text="left" />
+
+        <Button
+            android:id="@+id/rightBtn"
+            android:layout_width="68dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/leftBtn"
+            android:layout_marginEnd="26dp"
+            android:text="right" />
+
+        <Button
+            android:id="@+id/downBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/leftBtn"
+            android:layout_centerHorizontal="true"
+            android:text="Down" />
+
+        <Button
+            android:id="@+id/rotateBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="73dp"
+            android:text="rot" />
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>
