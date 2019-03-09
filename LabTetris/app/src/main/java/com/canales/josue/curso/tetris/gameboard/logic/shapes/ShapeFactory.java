@@ -26,7 +26,7 @@ public class ShapeFactory {
     }
 
     public static int getCount(){
-        return 7;
+        return Shape.ShapeTypeID.values().length;
     }
 
 }

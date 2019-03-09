@@ -7,10 +7,17 @@ import java.util.Random;
 
 public class Shape {
 
+
+    /*
+    TODO: implementar canRotate()
+    TODO: terminar rotate()
+    TODO: Plantear rediseño
+    */
+
     private int[][][] orientations;
     private int[][] coordinates;
     private int currentOrientation;
-    ShapeTypeID ID;
+    private ShapeTypeID ID;
 
 
     public Shape(){
@@ -31,9 +38,16 @@ public class Shape {
         return null;
     }
 
-    public void rotate(){
-        currentOrientation = (currentOrientation + 1)%orientations.length;
-        setCoordinates(coordinates[0][0],coordinates[0][1]);
+    public void rotate(String[]... board){
+        if (canRotate(board)){ //TODO: terminar metodo
+            currentOrientation = (currentOrientation + 1)%orientations.length;
+            setCoordinates(coordinates[0][0],coordinates[0][1]);
+        }
+    }
+
+    private boolean canRotate(String[][] board) {
+        //TODO: recorrer board y comparar con coordinates de currentOrientation + 1
+        return true;
     }
 
     public void setCoordinates(int i, int j){
@@ -42,13 +56,20 @@ public class Shape {
             if(orientations[currentOrientation][0][k] == 1)
                 break;
         }
+        int conti = 0;
         for (int m = 0; m < orientations[currentOrientation].length; m++) {
             for (int n = 0; n < orientations[currentOrientation][0].length; n++) {
-
+                if (orientations[currentOrientation][m][n] == 1) {
+                    coordinates[conti][0] = i + n;
+                    coordinates[conti++][1] = j + m - k;
+                }
             }
         }
     }
 
+    public int[][] getCoordinates() {
+        return coordinates;
+    }
 
     public enum ShapeTypeID {
         LTYPE(  new int[][][]{{{1, 0, 0}, {1, 0, 0}, {1, 1, 0}},

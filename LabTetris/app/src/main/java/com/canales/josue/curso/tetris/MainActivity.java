@@ -11,6 +11,13 @@ import com.canales.josue.curso.tetris.Classes.TetrisAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
+    /*
+    TODO: runnable
+    TODO: updateView(String[][])
+    TODO: define Down Loop
+    */
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
