@@ -8,7 +8,7 @@ public class Tetris {
     TODO: shapeTouched()
     TODO: verifyMovement()
     TODO: placeShape()
-    TODO: disposeCompletedRows()
+    TODO: deleteCompletedRows()
     TODO: movements [left, down, right]
     */
 
