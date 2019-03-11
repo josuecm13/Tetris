@@ -14,12 +14,14 @@ public class Shape {
 
 
     public Shape(){
+        /*
         currentOrientation = new Random().nextInt(ID.getLength());
         coordinates = new int[ID.getLength()][2];
         orientations = ID.getOrientations();
+        */
     }
 
-    public Shape(ShapeTypeID ID){
+    Shape(ShapeTypeID ID){
         this.ID = ID;
         currentOrientation = new Random().nextInt(ID.getLength());
         coordinates = new int[ID.getLength()][2];
@@ -45,19 +47,7 @@ public class Shape {
     private boolean canRotate(String[][] board, int i, int j) {
         int possibleOrientation = (currentOrientation + 1)%orientations.length;
         int head = getHead(possibleOrientation);
-        int conti = 0;
         //recorre desde el minimo en i y en j de las coordenadas
-        /*
-        for (int i = getMinimum(coordinates,0); i < i + orientations[possibleOrientation].length  ; i++) {
-            for (int j = getMinimum(coordinates,1); j < j + orientations[possibleOrientation][0].length; j++) {
-                if (orientations[possibleOrientation][orientation_i][orientation_j] == 1 && !board[i][j].equals(""))
-                    return false;
-                orientation_j++;
-            }
-            orientation_i++;
-        }
-        return true;
-        */
         for (int m = 0; m < orientations[possibleOrientation].length; m++) {
             for (int n = 0; n < orientations[possibleOrientation][0].length; n++) {
                 if (orientations[possibleOrientation][m][n] == 1 && !board[i + n][j + m - head].equals("")) {
@@ -68,14 +58,26 @@ public class Shape {
         return true;
     }
 
-    private void setCoordinates(int i, int j){
+    public boolean canBe(String[][] board, int i, int j){
+        int head = getHead(currentOrientation);
+        for (int m = 0; m < orientations[currentOrientation].length; m++) {
+            for (int n = 0; n < orientations[currentOrientation][0].length; n++) {
+                if (orientations[currentOrientation][m][n] == 1 && !board[i + n][j + m - head].equals("")) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void setCoordinates(int i, int j){
         int k = getHead(currentOrientation);
         int conti = 0;
         for (int m = 0; m < orientations[currentOrientation].length; m++) {
             for (int n = 0; n < orientations[currentOrientation][0].length; n++) {
                 if (orientations[currentOrientation][m][n] == 1) {
-                    coordinates[conti][0] = i + n;
-                    coordinates[conti++][1] = j + m - k;
+                    coordinates[conti][0] = i + m;
+                    coordinates[conti++][1] = j + n - k;
                 }
             }
         }
@@ -90,7 +92,7 @@ public class Shape {
         return k;
     }
 
-    private int getMinimum(int[][] array, int index){
+    public int getMinimum(int[][] array, int index){
         int min = Integer.MAX_VALUE;
         for (int[] anArray : array) {
             if (anArray[index] < min)

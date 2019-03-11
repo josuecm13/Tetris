@@ -9,58 +9,65 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="199dp"
-        tools:layout_editor_absoluteY="16dp"
-        tools:ignore="MissingConstraints">
+        android:background="#cbcecb"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="16dp">
 
         <android.support.v7.widget.GridLayout
             android:id="@+id/mytetrisboard"
             android:layout_width="380dp"
             android:layout_height="380dp"
             android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             tools:background="#252121">
 
 
-
         </android.support.v7.widget.GridLayout>
-
 
 
         <Button
             android:id="@+id/leftBtn"
             android:layout_width="74dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="18dp"
-            android:layout_marginStart="16dp"
-            android:text="left" />
+            android:layout_alignTop="@+id/rotateBtn"
+            android:layout_marginStart="12dp"
+            android:text="left"
+            android:onClick="moveLeft"/>
 
         <Button
             android:id="@+id/rightBtn"
             android:layout_width="68dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
             android:layout_alignTop="@+id/leftBtn"
-            android:layout_marginEnd="26dp"
-            android:text="right" />
+            android:layout_marginStart="111dp"
+            android:text="right"
+            android:onClick="moveRight"/>
 
         <Button
             android:id="@+id/downBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/leftBtn"
-            android:layout_centerHorizontal="true"
-            android:text="Down" />
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="17dp"
+            android:layout_marginStart="58dp"
+            android:text="Down"
+            android:onClick="moveDown"/>
 
         <Button
             android:id="@+id/rotateBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="73dp"
-            android:text="rot" />
+            android:layout_marginBottom="77dp"
+            android:layout_marginStart="-86dp"
+            android:layout_toEndOf="@+id/mytetrisboard"
+            android:text="rot"
+            android:onClick="rotate"/>
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>
