@@ -88,12 +88,13 @@ public class Tetris {
     }
 
     private void move(int addedI, int addedJ){
-        int possible_i = currentShape.getMinimum(currentShape.getCoordinates(),0) + addedI;
-        int possible_j = currentShape.getMinimum(currentShape.getCoordinates(),1) + addedJ;
+        int possible_i = currentShape.getHead()[0] + addedI;
+        int possible_j = currentShape.getHead()[1] + addedJ;
         if (currentShape.canBe(stringBoard,possible_i,possible_j)){
             currentShape.setCoordinates(possible_i,possible_j);
         }else{
-            shapeTouched();
+            if(possible_i == 19)
+                shapeTouched();
         }
     }
 

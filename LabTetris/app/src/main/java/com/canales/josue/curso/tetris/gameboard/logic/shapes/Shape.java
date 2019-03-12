@@ -25,9 +25,9 @@ public class Shape {
     Shape(ShapeTypeID ID){
         this.ID = ID;
         Log.i("SHAPE:",ID.toString());
-        currentOrientation = new Random().nextInt(ID.getLength());
-        coordinates = new int[ID.getLength()][2];
         orientations = ID.getOrientations();
+        currentOrientation = new Random().nextInt(orientations.length);
+        coordinates = new int[ID.getLength()][2];
     }
 
     public int getColor(){
@@ -38,17 +38,22 @@ public class Shape {
         return ID;
     }
 
-    public void rotate(String[]... board){
-        if (canRotate(board, getMinimum(coordinates,0), getMinimum(coordinates,1))){
-            currentOrientation = (currentOrientation + 1)%orientations.length;
-            setCoordinates(getMinimum(coordinates,0),getMinimum(coordinates,1));
+    public void rotate(String[][] board){
+        try{
+            if (canRotate(board, getMinimum(coordinates,0), getMinimum(coordinates,1))){
+                currentOrientation = (currentOrientation + 1)%orientations.length;
+                setCoordinates(getMinimum(coordinates,0),getMinimum(coordinates,1));
+            }
+        }catch (IndexOutOfBoundsException ignored){
+
         }
+
     }
 
     //
-    private boolean canRotate(String[][] board, int i, int j) {
+    private boolean canRotate(String[][] board, int i, int j) throws IndexOutOfBoundsException{
         int possibleOrientation = (currentOrientation + 1)%orientations.length;
-        int head = getHead(possibleOrientation);
+        int head = getOrientationHead(possibleOrientation);
         //recorre desde el minimo en i y en j de las coordenadas
         for (int m = 0; m < orientations[possibleOrientation].length; m++) {
             for (int n = 0; n < orientations[possibleOrientation][0].length; n++) {
@@ -61,19 +66,23 @@ public class Shape {
     }
 
     public boolean canBe(String[][] board, int i, int j){
-        int head = getHead(currentOrientation);
-        for (int m = 0; m < orientations[currentOrientation].length; m++) {
-            for (int n = 0; n < orientations[currentOrientation][0].length; n++) {
-                if (orientations[currentOrientation][m][n] == 1 && !board[i + n][j + m - head].equals("")) {
-                    return false;
+        int head = getOrientationHead(currentOrientation);
+        try{
+            for (int m = 0; m < orientations[currentOrientation].length; m++) {
+                for (int n = 0; n < orientations[currentOrientation][0].length; n++) {
+                    if (orientations[currentOrientation][m][n] == 1 && !board[i + m][j + n - head].equals("")) {
+                        return false;
+                    }
                 }
             }
+        }catch (IndexOutOfBoundsException e){
+            return false;
         }
         return true;
     }
 
     public void setCoordinates(int i, int j){
-        int k = getHead(currentOrientation);
+        int k = getOrientationHead(currentOrientation);
         int conti = 0;
         for (int m = 0; m < orientations[currentOrientation].length; m++) {
             for (int n = 0; n < orientations[currentOrientation][0].length; n++) {
@@ -85,7 +94,7 @@ public class Shape {
         }
     }
 
-    private int getHead(int orientation){
+    private int getOrientationHead(int orientation){
         int k;
         for (k = 0; k < orientations[orientation][0].length ; k++) {
             if(orientations[orientation][0][k] == 1)
@@ -103,7 +112,9 @@ public class Shape {
         return min;
     }
 
-
+    public int[] getHead(){
+        return coordinates[0];
+    }
 
     public int[][] getCoordinates() {
         return coordinates;

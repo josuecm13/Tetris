@@ -17,15 +17,9 @@ import com.canales.josue.curso.tetris.gameboard.logic.shapes.Shape;
 
 public class MainActivity extends AppCompatActivity {
 
-    /*
-       TODO: Corregir el desface de la matriz, actualizar matriz de string, etc...
-       TODO: Corregir repintado de las vista, tal vez hacerlo más sencillo
-    */
-
     Tetris tetris;
     GridLayout tetrisGridLayout;
     Handler handler;
-    int[][] prevCoordinates;
     private int rows, columns;
 
     @Override
@@ -36,13 +30,13 @@ public class MainActivity extends AppCompatActivity {
         rows = 20;
         columns = 20;
 
-        tetris = new Tetris(19,19);
+        tetris = new Tetris(18,18);
         generateTetris(20,20);
 
         tetris.start();
         updateTetrisView();
 
-
+/*
         handler = new Handler();
         Runnable run = new Runnable() {
             @Override
@@ -55,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         handler.post(run);
-
+*/
 
     }
 
@@ -123,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void rotate(View view){
-        tetris.getCurrentShape().rotate();
+        tetris.getCurrentShape().rotate(tetris.getStringBoard());
         updateTetrisView();
     }
 
