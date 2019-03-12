@@ -62,7 +62,7 @@ public class Tetris {
             int [][] coordinates = currentShape.getCoordinates();
             for (int[] coordinate: coordinates) {
                 shapeBoard[coordinate[0]][coordinate[1]] = currentShape;
-                stringBoard[coordinate[0]][coordinate[1]] = currentShape.getID().toString();
+                //stringBoard[coordinate[0]][coordinate[1]] = currentShape.getID().toString();
             }
         }
         else{

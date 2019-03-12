@@ -19,17 +19,22 @@ public class MainActivity extends AppCompatActivity {
 
     /*
        TODO: Corregir el desface de la matriz, actualizar matriz de string, etc...
+       TODO: Corregir repintado de las vista, tal vez hacerlo más sencillo
     */
 
     Tetris tetris;
     GridLayout tetrisGridLayout;
     Handler handler;
     int[][] prevCoordinates;
+    private int rows, columns;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        rows = 20;
+        columns = 20;
 
         tetris = new Tetris(19,19);
         generateTetris(20,20);
@@ -37,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         tetris.start();
         updateTetrisView();
 
-        /*
+
         handler = new Handler();
         Runnable run = new Runnable() {
             @Override
@@ -50,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         handler.post(run);
-        */
+
 
     }
 
@@ -73,50 +78,48 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void updateTetrisView(){
-        Log.i("Board",printMatrix(tetris.getStringBoard()));
-        if(tetris.canPlay){
-            if (prevCoordinates != null){
-                for(int[] coord: prevCoordinates){
-                    tetrisGridLayout.getChildAt(19*(coord[0]+1)+ (coord[1]+1))
-                            .getBackground()
-                            .setColorFilter(Color.rgb(0,0,0), PorterDuff.Mode.SRC);
-                }
-            }
-            prevCoordinates = tetris.getCurrentShape().getCoordinates();
-            for(int[] coord: prevCoordinates){
-                tetrisGridLayout.getChildAt(19*(coord[0]+1)+ (coord[1]+1))
-                        .getBackground()
-                        .setColorFilter(tetris.getCurrentShape().getID().getColor(), PorterDuff.Mode.SRC);
-            }if(tetris.height != Integer.MAX_VALUE){
-                for (int i = tetris.height + 1; i < 20; i++) {
-                    for (int j = 1; j < 20 ; j++) {
-                        if(tetris.getStringBoard()[i - 1][j - 1].equals("")){
-                            tetrisGridLayout.getChildAt(19*i+j)
-                                    .getBackground()
-                                    .setColorFilter(Color.rgb(0,0,0), PorterDuff.Mode.SRC);
-                        }else{
-                            tetrisGridLayout.getChildAt(19*i+j)
-                                    .getBackground()
-                                    .setColorFilter(Shape.
-                                            ShapeTypeID.valueOf(tetris.getStringBoard()[i-1][j-1] + "TYPE")
-                                            .getColor(), PorterDuff.Mode.SRC);
-                        }
-                    }
+    private void emptyTetrisLayout(){
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns ; j++) {
+                if (i == 0 || j == 0 || i + 1 == rows || j+1 == columns ){
+                    tetrisGridLayout.getChildAt(i*rows +j).getBackground().setColorFilter(Color.rgb(112,112,122), PorterDuff.Mode.SRC);
+                }else{
+                    tetrisGridLayout.getChildAt(i*rows +j).getBackground().setColorFilter(Color.rgb(0,0,0), PorterDuff.Mode.SRC);
                 }
             }
         }
     }
 
-    private String printMatrix(String[][] matrix){
-        StringBuilder newString= new StringBuilder();
-        for (String[] aMatrix : matrix) {
-            for (int j = 0; j < matrix[0].length; j++) {
-                newString.append(aMatrix[j]).append("\t");
-            }
-            newString.append("\n");
+    private void displayCurrentShape(){
+        for(int[] coord: tetris.getCurrentShape().getCoordinates()){
+            tetrisGridLayout.getChildAt(20*(coord[0]+1)+ (coord[1]+1))
+                    .getBackground()
+                    .setColorFilter(tetris.getCurrentShape().getID().getColor(), PorterDuff.Mode.SRC);
         }
-        return newString.toString();
+    }
+
+    private void displayTetrisState(){
+        int m = 0, n = 0;
+        for (int i = 1; i < rows-1; i++, m++) {
+            for (int j = 1; j < columns-1 ; j++, n++) {
+                if(!tetris.getStringBoard()[m][n].equals("")){
+                    tetrisGridLayout.getChildAt(rows*i+j)
+                            .getBackground()
+                            .setColorFilter(Shape.
+                                    ShapeTypeID.valueOf(tetris.getStringBoard()[m][n] + "TYPE")
+                                    .getColor(), PorterDuff.Mode.SRC);
+                }
+            }
+            n = 0;
+        }
+    }
+
+    private void updateTetrisView(){
+        if(tetris.canPlay){
+            emptyTetrisLayout();
+            displayCurrentShape();
+            displayTetrisState();
+        }
     }
 
     public void rotate(View view){

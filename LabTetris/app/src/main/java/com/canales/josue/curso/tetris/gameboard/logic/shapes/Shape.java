@@ -2,6 +2,7 @@ package com.canales.josue.curso.tetris.gameboard.logic.shapes;
 
 
 import android.graphics.Color;
+import android.util.Log;
 
 import java.util.Random;
 
@@ -23,6 +24,7 @@ public class Shape {
 
     Shape(ShapeTypeID ID){
         this.ID = ID;
+        Log.i("SHAPE:",ID.toString());
         currentOrientation = new Random().nextInt(ID.getLength());
         coordinates = new int[ID.getLength()][2];
         orientations = ID.getOrientations();
