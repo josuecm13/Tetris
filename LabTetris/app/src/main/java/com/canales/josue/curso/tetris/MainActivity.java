@@ -12,12 +12,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.canales.josue.curso.tetris.gameboard.logic.board.Tetris;
+import com.canales.josue.curso.tetris.gameboard.logic.board.TetrisController;
 import com.canales.josue.curso.tetris.gameboard.logic.shapes.Shape;
+
+
+/*
+    TODO: revisar toque de shape
+    TODO: revisar bien las filas completadas
+*/
 
 
 public class MainActivity extends AppCompatActivity {
 
-    Tetris tetris;
+    TetrisController tetrisController;
     GridLayout tetrisGridLayout;
     Handler handler;
     private int rows, columns;
@@ -30,26 +37,23 @@ public class MainActivity extends AppCompatActivity {
         rows = 20;
         columns = 20;
 
-        tetris = new Tetris(18,18);
-        generateTetris(20,20);
-
-        tetris.start();
+        tetrisController = new TetrisController(rows-2,columns-2);
+        generateTetris(rows,columns);
+        tetrisController.start();
         updateTetrisView();
 
-/*
         handler = new Handler();
         Runnable run = new Runnable() {
             @Override
             public void run() {
-                tetris.moveCurrentShape(Tetris.Movement.DOWN);
+                tetrisController.move(Tetris.Movement.DOWN);
                 updateTetrisView();
 
-                handler.postDelayed(this, 1000);
+                handler.postDelayed(this,500);
             }
         };
 
         handler.post(run);
-*/
 
     }
 
@@ -85,22 +89,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void displayCurrentShape(){
-        for(int[] coord: tetris.getCurrentShape().getCoordinates()){
-            tetrisGridLayout.getChildAt(20*(coord[0]+1)+ (coord[1]+1))
-                    .getBackground()
-                    .setColorFilter(tetris.getCurrentShape().getID().getColor(), PorterDuff.Mode.SRC);
+        if(tetrisController.getTetris().getCurrentShape() == null){
+            tetrisController.updateState();
+        }else{
+            for(int[] coord: tetrisController.getTetris().getCurrentShape().getCoordinates()){
+                tetrisGridLayout.getChildAt(20*(coord[0]+1)+ (coord[1]+1))
+                        .getBackground()
+                        .setColorFilter(tetrisController.getTetris().getCurrentShape().getID().getColor(), PorterDuff.Mode.SRC);
+            }
         }
+
     }
 
     private void displayTetrisState(){
         int m = 0, n = 0;
         for (int i = 1; i < rows-1; i++, m++) {
             for (int j = 1; j < columns-1 ; j++, n++) {
-                if(!tetris.getStringBoard()[m][n].equals("")){
+                if(!tetrisController.getTetris().getStringBoard()[m][n].equals("")){
                     tetrisGridLayout.getChildAt(rows*i+j)
                             .getBackground()
                             .setColorFilter(Shape.
-                                    ShapeTypeID.valueOf(tetris.getStringBoard()[m][n] + "TYPE")
+                                    ShapeTypeID.valueOf(tetrisController.getTetris().getStringBoard()[m][n] + "TYPE")
                                     .getColor(), PorterDuff.Mode.SRC);
                 }
             }
@@ -109,34 +118,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateTetrisView(){
-        if(tetris.canPlay){
-            emptyTetrisLayout();
-            displayCurrentShape();
-            displayTetrisState();
-        }
+        tetrisController.updateState();
+        emptyTetrisLayout();
+        displayCurrentShape();
+        displayTetrisState();
     }
 
     public void rotate(View view){
-        tetris.getCurrentShape().rotate(tetris.getStringBoard());
+        tetrisController.rotateShape();
         updateTetrisView();
     }
 
     public void moveRight(View view){
-        tetris.moveCurrentShape(Tetris.Movement.RIGHT);
+        tetrisController.move(Tetris.Movement.RIGHT);
         updateTetrisView();
     }
 
     public void moveLeft(View view){
-        tetris.moveCurrentShape(Tetris.Movement.LEFT);
+        tetrisController.move(Tetris.Movement.LEFT);
         updateTetrisView();
     }
 
     public void moveDown(View view){
-        tetris.moveCurrentShape(Tetris.Movement.DOWN);
+        tetrisController.move(Tetris.Movement.DOWN);
         updateTetrisView();
     }
-
-
 
 
 }

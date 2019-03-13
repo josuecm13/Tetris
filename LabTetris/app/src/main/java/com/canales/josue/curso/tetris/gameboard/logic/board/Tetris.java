@@ -1,5 +1,6 @@
 package com.canales.josue.curso.tetris.gameboard.logic.board;
 
+import com.canales.josue.curso.tetris.ShapeOverlapException;
 import com.canales.josue.curso.tetris.gameboard.logic.shapes.Shape;
 import com.canales.josue.curso.tetris.gameboard.logic.shapes.ShapeFactory;
 
@@ -19,7 +20,7 @@ public class Tetris {
     public boolean canPlay;
     public boolean canDelete;
     private List<Integer> completedRows;
-    private boolean bottomTouched;
+    public boolean bottomTouched;
 
     public Tetris(int rows, int columns){
         this.COLUMNS = columns;
@@ -31,10 +32,6 @@ public class Tetris {
         this.canPlay = true;
         completedRows = new ArrayList<>();
         initBoards();
-    }
-
-    public void start(){
-        placeShape();
     }
 
     private void initBoards(){
@@ -57,44 +54,54 @@ public class Tetris {
 
     public void placeShape(){
         currentShape = ShapeFactory.getInstance();
-        if(currentShape.canBe(stringBoard,0,center)){
-            currentShape.setCoordinates(0, center);
-            int [][] coordinates = currentShape.getCoordinates();
-            for (int[] coordinate: coordinates) {
-                shapeBoard[coordinate[0]][coordinate[1]] = currentShape;
-                //stringBoard[coordinate[0]][coordinate[1]] = currentShape.getID().toString();
+        try {
+            if(currentShape.canBe(stringBoard,0,center)){
+                currentShape.setCoordinates(0, center);
+                int [][] coordinates = currentShape.getCoordinates();
+                for (int[] coordinate: coordinates) {
+                    shapeBoard[coordinate[0]][coordinate[1]] = currentShape;
+                    //stringBoard[coordinate[0]][coordinate[1]] = currentShape.getID().toString();
+                }
             }
-        }
-        else{
+        } catch (ShapeOverlapException e) {
             canPlay = false;
             bottomTouched = true;
         }
     }
 
     public void moveCurrentShape(Movement direction){
-        switch (direction){
-            case RIGHT:
-                move(0,1);
-                break;
-            case LEFT:
-                move(0,-1);
-                break;
-            case DOWN:
-                move(1,0);
-                break;
-            default:
-                break;
+        if(currentShape == null){
+            placeShape();
+        }
+        else{
+            switch (direction){
+                case RIGHT:
+                    move(0,1);
+                    break;
+                case LEFT:
+                    move(0,-1);
+                    break;
+                case DOWN:
+                    move(1,0);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
     private void move(int addedI, int addedJ){
         int possible_i = currentShape.getHead()[0] + addedI;
         int possible_j = currentShape.getHead()[1] + addedJ;
-        if (currentShape.canBe(stringBoard,possible_i,possible_j)){
-            currentShape.setCoordinates(possible_i,possible_j);
-        }else{
-            if(possible_i == 19)
+        int bottomPart = currentShape.getMaximum(currentShape.getCoordinates(),0) + 1;
+        try {
+            if (currentShape.canBe(stringBoard,possible_i,possible_j)){
+                currentShape.setCoordinates(possible_i,possible_j);
+            }else if(bottomPart == ROWS) {
                 shapeTouched();
+            }
+        } catch (ShapeOverlapException e) {
+            shapeTouched();
         }
     }
 
@@ -107,12 +114,15 @@ public class Tetris {
             stringBoard[array[0]][array[1]] = currentShape.getID().toString();
             shapeBoard[array[0]][array[1]] = genericShape;
         }
+        currentShape = null;
     }
 
     public void checkCompletedRows(){
         boolean completedRow = true;
+        bottomTouched = false;
         completedRows = new ArrayList<>();
         for (int i = this.height; i < stringBoard.length; i++) {
+            completedRow = true;
             for (int j = 0; j < stringBoard[0].length; j++) {
                 if(stringBoard[i][j].equals("")){
                     completedRow = false;
