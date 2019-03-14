@@ -1,5 +1,6 @@
 package com.canales.josue.curso.tetris;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Handler;
@@ -7,8 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayout;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.canales.josue.curso.tetris.gameboard.logic.board.Tetris;
@@ -17,8 +20,7 @@ import com.canales.josue.curso.tetris.gameboard.logic.shapes.Shape;
 
 
 /*
-    TODO: revisar toque de shape
-    TODO: revisar bien las filas completadas
+    TODO: FUNCION QUE BUSCA EL TOPE DEL TETRIS
 */
 
 
@@ -27,8 +29,13 @@ public class MainActivity extends AppCompatActivity {
     TetrisController tetrisController;
     GridLayout tetrisGridLayout;
     Handler handler;
+    Button downbtn;
+    Button leftbtn;
+    Button rightbtn;
     private int rows, columns;
+    float speedMultiplier;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,10 +44,63 @@ public class MainActivity extends AppCompatActivity {
         rows = 20;
         columns = 20;
 
+        speedMultiplier = 1;
         tetrisController = new TetrisController(rows-2,columns-2);
         generateTetris(rows,columns);
         tetrisController.start();
         updateTetrisView();
+
+        downbtn = findViewById(R.id.downBtn);
+        leftbtn = findViewById(R.id.leftBtn);
+        rightbtn = findViewById(R.id.rightBtn);
+
+
+        leftbtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        tetrisController.move(Tetris.Movement.LEFT);
+                        updateTetrisView();
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        return true;
+                }
+                return false;
+            }
+        });
+
+        rightbtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        tetrisController.move(Tetris.Movement.RIGHT);
+                        updateTetrisView();
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        return true;
+                }
+                return false;
+            }
+        });
+
+
+
+        downbtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        speedMultiplier = 0.1f;
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        speedMultiplier = 1;
+                        return true;
+                }
+                return false;
+            }
+        });
 
         handler = new Handler();
         Runnable run = new Runnable() {
@@ -49,13 +109,16 @@ public class MainActivity extends AppCompatActivity {
                 tetrisController.move(Tetris.Movement.DOWN);
                 updateTetrisView();
 
-                handler.postDelayed(this,500);
+                handler.postDelayed(this,(int)(500*speedMultiplier));
             }
         };
 
         handler.post(run);
 
     }
+
+
+
 
     private void generateTetris( int rowCount, int columnCount){
         tetrisGridLayout = (GridLayout) findViewById(R.id.mytetrisboard);
@@ -93,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
             tetrisController.updateState();
         }else{
             for(int[] coord: tetrisController.getTetris().getCurrentShape().getCoordinates()){
-                tetrisGridLayout.getChildAt(20*(coord[0]+1)+ (coord[1]+1))
+                tetrisGridLayout.getChildAt(this.rows*(coord[0]+1)+ (coord[1]+1))
                         .getBackground()
                         .setColorFilter(tetrisController.getTetris().getCurrentShape().getID().getColor(), PorterDuff.Mode.SRC);
             }

@@ -76,13 +76,16 @@ public class Tetris {
         else{
             switch (direction){
                 case RIGHT:
-                    move(0,1);
+                    moveHorizontal(1);
                     break;
                 case LEFT:
-                    move(0,-1);
+                    moveHorizontal(-1);
                     break;
                 case DOWN:
-                    move(1,0);
+                    moveVertical(1);
+                    break;
+                case UP:
+                    moveVertical(-1);
                     break;
                 default:
                     break;
@@ -90,9 +93,9 @@ public class Tetris {
         }
     }
 
-    private void move(int addedI, int addedJ){
+    private void moveVertical(int addedI){
         int possible_i = currentShape.getHead()[0] + addedI;
-        int possible_j = currentShape.getHead()[1] + addedJ;
+        int possible_j = currentShape.getHead()[1];
         int bottomPart = currentShape.getMaximum(currentShape.getCoordinates(),0) + 1;
         try {
             if (currentShape.canBe(stringBoard,possible_i,possible_j)){
@@ -105,20 +108,35 @@ public class Tetris {
         }
     }
 
+
+    private void moveHorizontal(int addedJ){
+        int possible_i = currentShape.getHead()[0];
+        int possible_j = currentShape.getHead()[1] + addedJ;
+        int bottomPart = currentShape.getMaximum(currentShape.getCoordinates(),0) + 1;
+        try {
+            if (currentShape.canBe(stringBoard,possible_i,possible_j)){
+                currentShape.setCoordinates(possible_i,possible_j);
+            }else if(bottomPart == ROWS) {
+                shapeTouched();
+            }
+        } catch (ShapeOverlapException ignored) {}
+    }
+
+
+
     private void shapeTouched(){
         bottomTouched = true;
         int[][] newShapeCoordinates = currentShape.getCoordinates();
-        int shapeHeight = currentShape.getMinimum(newShapeCoordinates,0);
-        this.height = shapeHeight < this.height? shapeHeight: height;
         for (int[] array: newShapeCoordinates ) {
             stringBoard[array[0]][array[1]] = currentShape.getID().toString();
             shapeBoard[array[0]][array[1]] = genericShape;
         }
         currentShape = null;
+        setNewHeight();
     }
 
     public void checkCompletedRows(){
-        boolean completedRow = true;
+        boolean completedRow;
         bottomTouched = false;
         completedRows = new ArrayList<>();
         for (int i = this.height; i < stringBoard.length; i++) {
@@ -129,26 +147,40 @@ public class Tetris {
                     break;
                 }
             }
-            if(completedRow)
+            if(completedRow){
                 completedRows.add(i);
+                canDelete = true;
+            }
         }
     }
 
     public void deleteCompletedLastRow(){
         if (completedRows.isEmpty()){
             canDelete = false;
-        }else {
+            setNewHeight();
+        } else {
             int limit = completedRows.get(completedRows.size()-1);
-            for (int i = limit; i > ( height - 1 > 0 ? height - 1 : 0 ) ; i--) {
+            for (int i = limit; i >= ( height - 2 > 0 ? height - 2 : 0 ) ; i--) {
                 stringBoard[i] = stringBoard[i-1];
                 shapeBoard[i] = shapeBoard[i-1];
             }
-            height++;
             completedRows.remove(0);
+            height++;
         }
     }
 
-    public enum Movement{ RIGHT, LEFT, DOWN}
+    private void setNewHeight() {
+        for (int i = 0; i < stringBoard.length; i++) {
+            for (int j = 0; j < stringBoard[0].length; j++) {
+                if(!stringBoard[i][j].equals("")){
+                    this.height = i;
+                    return;
+                }
+            }
+        }
+    }
+
+    public enum Movement{ RIGHT, LEFT, DOWN, UP}
 
 
 }

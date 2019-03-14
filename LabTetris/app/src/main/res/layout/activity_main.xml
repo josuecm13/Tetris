@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#cbcecb"
+        android:background="#16011c"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="16dp">
@@ -34,6 +34,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignTop="@+id/rotateBtn"
             android:layout_marginStart="12dp"
+            android:background="@drawable/round_template"
             android:text="left"
             android:onClick="moveLeft"/>
 
@@ -44,6 +45,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignTop="@+id/leftBtn"
             android:layout_marginStart="111dp"
+            android:background="@drawable/round_template"
             android:text="right"
             android:onClick="moveRight"/>
 
@@ -55,8 +57,10 @@
             android:layout_alignParentStart="true"
             android:layout_marginBottom="17dp"
             android:layout_marginStart="58dp"
+            android:background="@drawable/round_template"
             android:text="Down"
-            android:onClick="moveDown"/>
+            android:onClick="moveDown"
+            />
 
         <Button
             android:id="@+id/rotateBtn"
@@ -66,6 +70,7 @@
             android:layout_marginBottom="77dp"
             android:layout_marginStart="-86dp"
             android:layout_toEndOf="@+id/mytetrisboard"
+            android:background="@drawable/round_template"
             android:text="rot"
             android:onClick="rotate"/>
     </RelativeLayout>
