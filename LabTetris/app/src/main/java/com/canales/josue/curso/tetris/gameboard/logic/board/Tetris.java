@@ -161,11 +161,13 @@ public class Tetris {
         } else {
             int limit = completedRows.get(completedRows.size()-1);
             for (int i = limit; i >= ( height - 2 > 0 ? height - 2 : 0 ) ; i--) {
-                stringBoard[i] = stringBoard[i-1];
-                shapeBoard[i] = shapeBoard[i-1];
+                System.arraycopy(stringBoard[i-1],0,stringBoard[i],0,stringBoard[0].length);
+                System.arraycopy(shapeBoard[i-1],0,shapeBoard[i],0,stringBoard[0].length);
+                //stringBoard[i] = stringBoard[i-1];
+                //shapeBoard[i] = shapeBoard[i-1];
             }
             completedRows.remove(0);
-            height++;
+            setNewHeight();
         }
     }
 
