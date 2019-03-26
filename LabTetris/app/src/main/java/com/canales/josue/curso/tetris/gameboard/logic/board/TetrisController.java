@@ -1,9 +1,10 @@
 package com.canales.josue.curso.tetris.gameboard.logic.board;
 
+import com.canales.josue.curso.tetris.GameOverException;
+
 public class TetrisController {
 
     private Tetris tetris;
-
 
     public TetrisController(int r, int c){
         tetris = new Tetris(r,c);
@@ -26,7 +27,7 @@ public class TetrisController {
         }
     }
 
-    public void move(Tetris.Movement direction){
+    public void move(Tetris.Movement direction) throws GameOverException {
         tetris.moveCurrentShape(direction);
     }
 

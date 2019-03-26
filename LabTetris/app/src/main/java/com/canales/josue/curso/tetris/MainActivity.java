@@ -60,7 +60,11 @@ public class MainActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()){
                     case MotionEvent.ACTION_DOWN:
-                        tetrisController.move(Tetris.Movement.LEFT);
+                        try {
+                            tetrisController.move(Tetris.Movement.LEFT);
+                        } catch (GameOverException e) {
+                            e.printStackTrace();
+                        }
                         updateTetrisView();
                         return true;
                     case MotionEvent.ACTION_UP:
@@ -75,7 +79,11 @@ public class MainActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()){
                     case MotionEvent.ACTION_DOWN:
-                        tetrisController.move(Tetris.Movement.RIGHT);
+                        try {
+                            tetrisController.move(Tetris.Movement.RIGHT);
+                        } catch (GameOverException e) {
+                            e.printStackTrace();
+                        }
                         updateTetrisView();
                         return true;
                     case MotionEvent.ACTION_UP:
@@ -106,7 +114,11 @@ public class MainActivity extends AppCompatActivity {
         Runnable run = new Runnable() {
             @Override
             public void run() {
-                tetrisController.move(Tetris.Movement.DOWN);
+                try {
+                    tetrisController.move(Tetris.Movement.DOWN);
+                } catch (GameOverException e) {
+                    tetrisController = new TetrisController(rows-2,columns-2);
+                }
                 updateTetrisView();
 
                 handler.postDelayed(this,(int)(500*speedMultiplier));
@@ -193,17 +205,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void moveRight(View view){
-        tetrisController.move(Tetris.Movement.RIGHT);
+        try {
+            tetrisController.move(Tetris.Movement.RIGHT);
+        } catch (GameOverException e) {
+            e.printStackTrace();
+        }
         updateTetrisView();
     }
 
     public void moveLeft(View view){
-        tetrisController.move(Tetris.Movement.LEFT);
+        try {
+            tetrisController.move(Tetris.Movement.LEFT);
+        } catch (GameOverException e) {
+            e.printStackTrace();
+        }
         updateTetrisView();
     }
 
     public void moveDown(View view){
-        tetrisController.move(Tetris.Movement.DOWN);
+        try {
+            tetrisController.move(Tetris.Movement.DOWN);
+        } catch (GameOverException e) {
+            e.printStackTrace();
+        }
         updateTetrisView();
     }
 

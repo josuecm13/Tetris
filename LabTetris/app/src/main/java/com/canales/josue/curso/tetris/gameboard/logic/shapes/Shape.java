@@ -4,6 +4,7 @@ package com.canales.josue.curso.tetris.gameboard.logic.shapes;
 import android.graphics.Color;
 import android.util.Log;
 
+import com.canales.josue.curso.tetris.GameOverException;
 import com.canales.josue.curso.tetris.ShapeOverlapException;
 
 import java.util.Random;
@@ -67,13 +68,20 @@ public class Shape {
         return true;
     }
 
-    public boolean canBe(String[][] board, int i, int j) throws ShapeOverlapException{
+    public boolean canBe(String[][] board, int i, int j) throws ShapeOverlapException, GameOverException{
         int head = getOrientationHead(currentOrientation);
+        boolean isNewShape = false;
         try{
             for (int m = 0; m < orientations[currentOrientation].length; m++) {
                 for (int n = 0; n < orientations[currentOrientation][0].length; n++) {
+                    if(coordinates[m][0] == 0)
+                        isNewShape = true;
                     if (orientations[currentOrientation][m][n] == 1 && !board[i + m][j + n - head].equals("")) {
-                        throw new ShapeOverlapException();
+                        if(isNewShape)
+                            throw new GameOverException();
+                        else {
+                            throw new ShapeOverlapException();
+                        }
                     }
                 }
             }

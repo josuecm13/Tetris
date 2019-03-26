@@ -1,5 +1,6 @@
 package com.canales.josue.curso.tetris.gameboard.logic.board;
 
+import com.canales.josue.curso.tetris.GameOverException;
 import com.canales.josue.curso.tetris.ShapeOverlapException;
 import com.canales.josue.curso.tetris.gameboard.logic.shapes.Shape;
 import com.canales.josue.curso.tetris.gameboard.logic.shapes.ShapeFactory;
@@ -66,31 +67,36 @@ public class Tetris {
         } catch (ShapeOverlapException e) {
             canPlay = false;
             bottomTouched = true;
-        }
+        } catch (Exception ignored){}
     }
 
-    public void moveCurrentShape(Movement direction){
-        if(currentShape == null){
-            placeShape();
-        }
-        else{
-            switch (direction){
-                case RIGHT:
-                    moveHorizontal(1);
-                    break;
-                case LEFT:
-                    moveHorizontal(-1);
-                    break;
-                case DOWN:
-                    moveVertical(1);
-                    break;
-                case UP:
-                    moveVertical(-1);
-                    break;
-                default:
-                    break;
+    public void moveCurrentShape(Movement direction) throws GameOverException{
+        if(canPlay){
+            if(currentShape == null){
+                placeShape();
             }
+            else{
+                switch (direction){
+                    case RIGHT:
+                        moveHorizontal(1);
+                        break;
+                    case LEFT:
+                        moveHorizontal(-1);
+                        break;
+                    case DOWN:
+                        moveVertical(1);
+                        break;
+                    case UP:
+                        moveVertical(-1);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }else{
+            throw new GameOverException();
         }
+
     }
 
     private void moveVertical(int addedI){
@@ -105,6 +111,10 @@ public class Tetris {
             }
         } catch (ShapeOverlapException e) {
             shapeTouched();
+        } catch (GameOverException e){
+            canPlay = false;
+            canDelete = false;
+            bottomTouched = true;
         }
     }
 
@@ -119,7 +129,7 @@ public class Tetris {
             }else if(bottomPart == ROWS) {
                 shapeTouched();
             }
-        } catch (ShapeOverlapException ignored) {}
+        } catch (Exception ignored) {}
     }
 
 
